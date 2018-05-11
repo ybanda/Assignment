@@ -53,13 +53,13 @@ public class AddProduct extends HttpServlet {
 	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		String operation =request.getParameter("operation");
-		String quantity= request.getParameter("quantity");
+		String operation =null;
+		String quantity= null;
 
-		String itemId = request.getParameter("itemId");
-		String itemName= request.getParameter("itemName");
-		String relatedProdId= request.getParameter("relatedProdId");
-		PrintWriter out = response.getWriter();
+		String itemId = null;
+		String itemName= null;
+		String relatedProdId= null;
+		PrintWriter out = null;
 		response.setContentType("text/html");
 		response.setHeader("Cache-control", "no-cache, no-store");
 		response.setHeader("Pragma", "no-cache");
@@ -70,45 +70,70 @@ public class AddProduct extends HttpServlet {
 		response.setHeader("Access-Control-Allow-Headers", "Content-Type");
 		response.setHeader("Access-Control-Max-Age", "86400");
 		logger.info("Inside of Add Product :: POST");
-		Gson gson = new Gson(); 
-		JsonObject jsonObject = new JsonObject();
+		Gson gson = null;
+		JsonObject jsonObject = null;
+		JsonElement productJSON =null;
 		try {
-
+			operation=request.getParameter("operation");
+			quantity= request.getParameter("quantity");
+			itemId = request.getParameter("itemId");
+			out =response.getWriter();
+			gson=new Gson(); 
+			jsonObject = new JsonObject();
+			relatedProdId= request.getParameter("relatedProdId");
+			logger.info("Details are - salesRepId ="+relatedProdId+" itemId -"+itemId+", quantity ="+quantity +"Item NAme="+itemName
+					+" Product List ="+productList.size()
+					);
 			switch(operation) {
 			case "delete":
+				logger.info("Itemd Id ="+itemId +"contains="+productList.containsKey(itemId));
 				productList.remove(itemId);
+				
 				logger.info("After Deleting Operation - List="+productList);
 				break;
 			case "add":
+				if(!productList.containsKey(itemId)) {
+					Product product = new Product(quantity,itemId,itemName,relatedProdId);
+					productList.put(itemId,product);
+
+					
+				}
+				else {
+					response.sendRedirect("add-error.html");
+				}
+				break;
 			case "update":
-				Product product = new Product(quantity,itemId,itemName,relatedProdId);
-				productList.put(itemId,product);
+				Product productUpdate = new Product(quantity,itemId,itemName,relatedProdId);
+				productList.put(itemId,productUpdate);
 
 				logger.info("Details are - salesRepId ="+relatedProdId+" itemId -"+itemId+", quantity ="+quantity +"Item NAme="+itemName
 						+" Product List ="+productList.size()
 						);
 				break;
-			
-				default:
-					logger.info("Nothing to show here");
-				
 
+			default:
+				logger.info("Nothing to show here");
 
-				
 			}
-			JsonElement productJSON = gson.toJsonTree(productList.values());
+			productJSON = gson.toJsonTree(productList.values());
 			jsonObject.add("productJSON", productJSON);
 			logger.info(jsonObject.toString());
 			out.println(jsonObject.toString());
 			out.close();
 		}
-			catch(Exception exception) {
+		catch(Exception exception) {
+			exception.printStackTrace();
+		}
+		finally{
+			operation =null;
+			quantity= null;
 
-			}
-			finally{
-
-			}
-
+			itemId = null;
+			itemName= null;
+			relatedProdId= null;
 		}
 
 	}
+
+
+}

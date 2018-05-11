@@ -74,8 +74,8 @@ function validateForm(){
 	
 	return returnValue;
 }
-function performOperation(operation,itemId,quantity,itemName,relatedProdId){
-	alert('performOperation='+operation+'Item Id='+itemId);
+function performOperation(operation,quantity,itemId,itemName,relatedProdId){
+	console.log('performOperation='+operation+'Item Id='+itemId);
 	$.ajax({
 	    url: "AddProduct",
 	    type: "POST",
@@ -87,7 +87,12 @@ function performOperation(operation,itemId,quantity,itemName,relatedProdId){
 	    	"&relatedProdId="+relatedProdId,
 	    
 	    	success: function(data, textStatus, jqXHR) {
-	    		
+	    		console.log(data);
+	    		var parsed = data;
+	    		parsed = JSON.parse(parsed);
+	    		//console.log("Parsed="+parsed.productJSON[0].quantity);
+	    			
+	    		constructDataGrid(parsed);
 	    
 	    	
 	    	},
@@ -120,8 +125,7 @@ function populateTheGrid(quantity,itemId,itemName,relatedProdId){
 	    		var parsed = data;
 	    		parsed = JSON.parse(parsed);
 	    		//console.log("Parsed="+parsed.productJSON[0].quantity);
-	    		
-	    		
+	    			
 	    		constructDataGrid(parsed);
 	    	
 	    	},
@@ -137,7 +141,7 @@ function populateTheGrid(quantity,itemId,itemName,relatedProdId){
 	
 }
 function constructDataGrid(parsed){
-	var taggedData;
+	var taggedData="<tr>           <th>Quantity</th><th>Item Id</th><th>Item Name</th><th>Related Products</th><th>Delete </th><th>Update</th></tr>";
 	$.each(parsed.productJSON,function(i, item){
 		taggedData +="<tr>" +
 				"<td>"+item.quantity+"</td>"+
@@ -145,10 +149,17 @@ function constructDataGrid(parsed){
 				+"<td>"+item.itemName+"</td>"+
 				"<td>"+item.relatedProdId+"</td>";
 			
-			taggedData +="<td class='center trashBlack' onclick=performOperation('delete','"+item.itemId+"')></td>" +
+			taggedData +="<td class='center trashBlack' onclick=performOperation('delete','"+item.quantity+"','"+item.itemId+"','"+item.itemName+"','"+item.relatedProdId+"')></td>" +
 			
-					"<td > <input class='center available' onclick=performOperation('update','"+item.itemId+"')></td>" +
+					"<td > <input class='center available' onclick=performOperation('update','"+item.quantity+"','"+item.itemId+"','"+item.itemName+"','"+item.relatedProdId+"')></td>" +
 					"</tr>"
 	});
-	$("#instructionText").append(taggedData);
+	$("#instructionText").html(taggedData);
+	resetTheFormData();
+}
+function resetTheFormData(){
+	$('#quantity').val('');
+	$('#itemId').val('');
+	$('#itemName').val('');
+	$('#salesRepId').val('');
 }

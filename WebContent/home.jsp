@@ -75,13 +75,13 @@
             </div>
             <div class="sharpblueBar">Added Items</div>
            
-            	<table id="instructionText" border=1>
+            <table id="instructionText" border=1>
             <tr>
-            <th> Quantity</th>
+            <th>Quantity</th>
             <th>Item Id</th>
             <th>Item Name</th>
-            <th> Related Products</th>
-            <th >Delete </th>
+            <th>Related Products</th>
+            <th>Delete </th>
             <th>Update</th>
             </tr>
             </table>
