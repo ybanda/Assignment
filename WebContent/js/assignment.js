@@ -2,8 +2,8 @@
 
 function changeProductName(val){
 	console.log('changeProductName='+val);
-	var shoeRelatd = ['lace','shoe polish', 'Brush','shinner'];
-	var phoneRelated =['charger','case','screen Guard'];
+	var shoeRelatd = ['lace','shoepolish', 'Brush','shinner'];
+	var phoneRelated =['charger','case','screenGuard'];
 	var clotherRelated =['tie','shirt','trouser'];
 	var finalArray=[];
 	switch(val){
@@ -16,16 +16,16 @@ function changeProductName(val){
 	case 'Clothes':
 		finalArray=clotherRelated;
 		break;
-	
-		
-		
+
+
+
 	}
 	var option = '';
 	for (var i=0;i<finalArray.length;i++){
-		   option += '<option value="'+ finalArray[i] + '">' + finalArray[i] + '</option>';
-		}
+		option += '<option value="'+ finalArray[i] + '">' + finalArray[i] + '</option>';
+	}
 	console.log('Option value='+val+' Appeneded Value ='+option);
-		$('#salesRepId').append(option);
+	$('#salesRepId').append(option);
 }
 
 //inputboxerror
@@ -44,7 +44,7 @@ function validateForm(){
 	var salesRepId = $('#salesRepId').val();
 	var error =$('#error');
 	console.log('Quantity = '+quantity+' Item Id='+itemId+", Item Name="+itemName+", Sales Rep Id="+salesRepId);
-
+	$("#loading").attr("disabled","disabled").css({'cursor':'wait'});
 	if(!quantity.length){
 		console.log('qty is required');
 		errorStr+='Quantity is required <br>';
@@ -71,88 +71,88 @@ function validateForm(){
 	if(returnValue==true)
 		populateTheGrid(quantity,itemId,itemName,salesRepId);
 	error.html(errorStr);
-	
+	$("#loading").attr("disabled",false).css({'cursor':'default'});
 	return returnValue;
 }
 function performOperation(operation,quantity,itemId,itemName,relatedProdId){
 	console.log('performOperation='+operation+'Item Id='+itemId);
 	$.ajax({
-	    url: "AddProduct",
-	    type: "POST",
-	    data:
-	    	"operation="+operation+
-	    	"&quantity="+quantity+
-	    	"&itemId="+itemId+
-	    	"&itemName="+itemName+
-	    	"&relatedProdId="+relatedProdId,
-	    
-	    	success: function(data, textStatus, jqXHR) {
-	    		console.log(data);
-	    		var parsed = data;
-	    		parsed = JSON.parse(parsed);
-	    		//console.log("Parsed="+parsed.productJSON[0].quantity);
-	    			
-	    		constructDataGrid(parsed);
-	    
-	    	
-	    	},
-	    	 error: function(jqXHR, textStatus, errorThrown){
-	    		 console.log("Something really bad happened " + textStatus +"\n"+jqXHR.responseText);
-                 
-            }
-	    
+		url: "AddProduct",
+		type: "POST",
+		data:
+			"operation="+operation+
+			"&quantity="+quantity+
+			"&itemId="+itemId+
+			"&itemName="+itemName+
+			"&relatedProdId="+relatedProdId,
+
+			success: function(data, textStatus, jqXHR) {
+				console.log(data);
+				var parsed = data;
+				parsed = JSON.parse(parsed);
+				//console.log("Parsed="+parsed.productJSON[0].quantity);
+
+				constructDataGrid(parsed);
+
+
+			},
+			error: function(jqXHR, textStatus, errorThrown){
+				console.log("Something really bad happened " + textStatus +"\n"+jqXHR.responseText);
+
+			}
+
 	}).done(function( e ) {
-	    console.log( "word was saved" + e );
+		console.log( "word was saved" + e );
 	});
-	
+
 }
 function populateTheGrid(quantity,itemId,itemName,relatedProdId){
 	var operation='add';
 	console.log('Populate Grid'+quantity+","+itemId+","+itemName+","+relatedProdId);
-	   var returnValue;
+	var returnValue;
 	$.ajax({
-	    url: "AddProduct",
-	    type: "POST",
-	    data:
-	    	"operation="+operation+
-	    	"&quantity="+quantity+
-	    	"&itemId="+itemId+
-	    	"&itemName="+itemName+
-	    	"&relatedProdId="+relatedProdId,
-	    		    
-	    	success: function(data, textStatus, jqXHR) {
-	    		console.log(data);
-	    		var parsed = data;
-	    		parsed = JSON.parse(parsed);
-	    		//console.log("Parsed="+parsed.productJSON[0].quantity);
-	    			
-	    		constructDataGrid(parsed);
-	    	
-	    	},
-	    	 error: function(jqXHR, textStatus, errorThrown){
-	    		 console.log("Something really bad happened " + textStatus +"\n"+jqXHR.responseText);
-                 
-            }
-	    
+		url: "AddProduct",
+		type: "POST",
+		data:
+			"operation="+operation+
+			"&quantity="+quantity+
+			"&itemId="+itemId+
+			"&itemName="+itemName+
+			"&relatedProdId="+relatedProdId,
+
+			success: function(data, textStatus, jqXHR) {
+				console.log(data);
+				var parsed = data;
+				parsed = JSON.parse(parsed);
+				console.log("populateTheGrid :: success"+parsed);
+
+				constructDataGrid(parsed);
+
+			},
+			error: function(jqXHR, textStatus, errorThrown){
+				console.log("Something really bad happened " + textStatus +"\n"+jqXHR.responseText);
+
+			}
+
 	}).done(function( e ) {
-	    console.log( "word was saved" + e );
+		console.log( "word was saved" + e );
 	});
-	
-	
+
+
 }
 function constructDataGrid(parsed){
 	var taggedData="<tr>           <th>Quantity</th><th>Item Id</th><th>Item Name</th><th>Related Products</th><th>Delete </th><th>Update</th></tr>";
 	$.each(parsed.productJSON,function(i, item){
 		taggedData +="<tr>" +
-				"<td>"+item.quantity+"</td>"+
-				"<td>"+item.itemId+"</td>"
-				+"<td>"+item.itemName+"</td>"+
-				"<td>"+item.relatedProdId+"</td>";
-			
-			taggedData +="<td class='center trashBlack' onclick=performOperation('delete','"+item.quantity+"','"+item.itemId+"','"+item.itemName+"','"+item.relatedProdId+"')></td>" +
-			
-					"<td > <input class='center available' onclick=performOperation('update','"+item.quantity+"','"+item.itemId+"','"+item.itemName+"','"+item.relatedProdId+"')></td>" +
-					"</tr>"
+		"<td>"+item.quantity+"</td>"+
+		"<td>"+item.itemId+"</td>"
+		+"<td>"+item.itemName+"</td>"+
+		"<td>"+item.relatedProdId+"</td>";
+
+		taggedData +="<td class='center trashBlack' onclick=performOperation('delete','"+item.quantity+"','"+item.itemId+"','"+item.itemName+"','"+item.relatedProdId+"')></td>" +
+
+		"<td > <input class='center available' onclick=performOperation('update','"+item.quantity+"','"+item.itemId+"','"+item.itemName+"','"+item.relatedProdId+"')></td>" +
+		"</tr>"
 	});
 	$("#instructionText").html(taggedData);
 	resetTheFormData();

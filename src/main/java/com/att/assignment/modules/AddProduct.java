@@ -77,10 +77,11 @@ public class AddProduct extends HttpServlet {
 			operation=request.getParameter("operation");
 			quantity= request.getParameter("quantity");
 			itemId = request.getParameter("itemId");
+			itemName= request.getParameter("itemName");
+			relatedProdId= request.getParameter("relatedProdId");
 			out =response.getWriter();
 			gson=new Gson(); 
 			jsonObject = new JsonObject();
-			relatedProdId= request.getParameter("relatedProdId");
 			logger.info("Details are - salesRepId ="+relatedProdId+" itemId -"+itemId+", quantity ="+quantity +"Item NAme="+itemName
 					+" Product List ="+productList.size()
 					);

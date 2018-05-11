@@ -4,7 +4,7 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
-<title>Insert title here</title><%-- 
+<title>Home</title><%-- 
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %> --%>
 <link rel="stylesheet" type="text/css" href="css/OM.css">
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
@@ -32,7 +32,8 @@
                     <div class="spacer2"></div>
                     <div class="floatLeft selectWidth15">
                         <input name="quantity" id="quantity" type="text" class="inputboxBg selectWidth45" size="15" maxlength="15" placeholder="">
-                        <div class="padding10">*Qty</div>
+                        <div class="padding10" >*Qty</div>
+                      
                     </div>
                     <div class="floatLeft selectWidth25">
                         <input name="itemId"  id="itemId" type="text" class="inputboxBg selectWidth80" size="15" maxlength="15" placeholder="">
@@ -61,7 +62,7 @@
                         <div class="padding10">Related Products</div>
                     </div>
                     <div class="floatLeft selectWidth15">
-                        <input type="button" value=" Quick Add " class="greenButton"  onclick="validateForm()">
+                        <input type="button" id="loading" value=" Quick Add " class="greenButton"  onclick="validateForm()">
                     </div> 
                     
                                
