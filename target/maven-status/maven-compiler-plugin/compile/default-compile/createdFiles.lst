@@ -1,0 +1,6 @@
+com\att\assignment\modules\LoginServlet.class
+com\att\assignment\modules\DeleteProduct.class
+com\att\assignment\model\RelatedProducts.class
+com\att\assignment\model\Product.class
+com\att\assignment\constants\ProjectConstants.class
+com\att\assignment\modules\AddProduct.class
