@@ -10,17 +10,18 @@ import javax.servlet.http.HttpServletResponse;
 import org.apache.log4j.Logger;
 
 /**
- * Servlet implementation class LoginServlet
+ * Servlet implementation class AddProduct
  */
-@WebServlet("/LoginServlet")
-public class LoginServlet extends HttpServlet {
+@WebServlet("/AddProduct")
+public class AddProduct extends HttpServlet {
 	private static final long serialVersionUID = 1L;
-      
-	private static Logger logger = Logger.getLogger(LoginServlet.class);
+       
+
+	private static Logger logger = Logger.getLogger(AddProduct.class);
     /**
      * @see HttpServlet#HttpServlet()
      */
-    public LoginServlet() {
+    public AddProduct() {
         super();
         // TODO Auto-generated constructor stub
     }
@@ -30,15 +31,12 @@ public class LoginServlet extends HttpServlet {
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		// TODO Auto-generated method stub
+		logger.info("Inside of Add Product :: GET");
 		response.getWriter().append("Served at: ").append(request.getContextPath());
-		String userName=request.getParameter("userId");
-		String password = request.getParameter("password");
-		logger.info("Inside of GEt Method -- User Id "+userName +" Password="+password);
-		if(userName.equals("admin")&& password.equals("admin")) {
-			response.sendRedirect("home.html");
-		}else {
-	response.sendRedirect("error.html");
-	}
+		String quantity= request.getParameter("quantity");
+		String itemId = request.getParameter("itemId");
+		String salesRepId= request.getParameter("salesRepId");
+		logger.info("Details are - salesRepId ="+salesRepId+" itemId -"+itemId+", quantity ="+quantity);
 	}
 
 	/**
