@@ -67,41 +67,62 @@ function validateForm(){
 		console.log('Item Name is required');
 		returnValue=false;
 	}
-	alert('ReturnVal'+returnValue+"--"+(returnValue==true));
+	console.log('ReturnVal'+returnValue+"--"+(returnValue==true));
 	if(returnValue==true)
 		populateTheGrid(quantity,itemId,itemName,salesRepId);
 	error.html(errorStr);
 	
 	return returnValue;
 }
-function populateTheGrid(quantity,itemId,itemName,relatedProdId){
-	
-	alert('Populate Grid'+quantity+","+itemId+","+itemName+","+relatedProdId);
-	   var returnValue;
+function performOperation(operation,itemId,quantity,itemName,relatedProdId){
+	alert('performOperation='+operation+'Item Id='+itemId);
 	$.ajax({
 	    url: "AddProduct",
 	    type: "POST",
 	    data:
-	    	"quantity="+quantity+
+	    	"operation="+operation+
+	    	"&quantity="+quantity+
 	    	"&itemId="+itemId+
 	    	"&itemName="+itemName+
 	    	"&relatedProdId="+relatedProdId,
 	    
 	    	success: function(data, textStatus, jqXHR) {
+	    		
+	    
+	    	
+	    	},
+	    	 error: function(jqXHR, textStatus, errorThrown){
+	    		 console.log("Something really bad happened " + textStatus +"\n"+jqXHR.responseText);
+                 
+            }
+	    
+	}).done(function( e ) {
+	    console.log( "word was saved" + e );
+	});
+	
+}
+function populateTheGrid(quantity,itemId,itemName,relatedProdId){
+	var operation='add';
+	console.log('Populate Grid'+quantity+","+itemId+","+itemName+","+relatedProdId);
+	   var returnValue;
+	$.ajax({
+	    url: "AddProduct",
+	    type: "POST",
+	    data:
+	    	"operation="+operation+
+	    	"&quantity="+quantity+
+	    	"&itemId="+itemId+
+	    	"&itemName="+itemName+
+	    	"&relatedProdId="+relatedProdId,
+	    		    
+	    	success: function(data, textStatus, jqXHR) {
 	    		console.log(data);
-	    		data = data.split("Served at: /Exercise")[1];
-	    		console.log(data.productJSON);
+	    		var parsed = data;
+	    		parsed = JSON.parse(parsed);
+	    		//console.log("Parsed="+parsed.productJSON[0].quantity);
 	    		
-	    		$("#instructionText").html(data);
-	    	/*	$.each( arr, function( key, value ) {
-	    			 alert('Key ='+key+',Value='+value);
-	    			
-	    			});*/
 	    		
-	    		/*alert(data[i].quantity+"\t"
-	    				+data[i].itemId+"\t"+
-	    				data[i].itemName+"\t"+
-	    				data[i].relatedProdId);*/
+	    		constructDataGrid(parsed);
 	    	
 	    	},
 	    	 error: function(jqXHR, textStatus, errorThrown){
@@ -114,4 +135,20 @@ function populateTheGrid(quantity,itemId,itemName,relatedProdId){
 	});
 	
 	
+}
+function constructDataGrid(parsed){
+	var taggedData;
+	$.each(parsed.productJSON,function(i, item){
+		taggedData +="<tr>" +
+				"<td>"+item.quantity+"</td>"+
+				"<td>"+item.itemId+"</td>"
+				+"<td>"+item.itemName+"</td>"+
+				"<td>"+item.relatedProdId+"</td>";
+			
+			taggedData +="<td class='center trashBlack' onclick=performOperation('delete','"+item.itemId+"')></td>" +
+			
+					"<td > <input class='center available' onclick=performOperation('update','"+item.itemId+"')></td>" +
+					"</tr>"
+	});
+	$("#instructionText").append(taggedData);
 }

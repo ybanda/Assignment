@@ -74,21 +74,22 @@
                 <div class="clear"></div>                                            	                
             </div>
             <div class="sharpblueBar">Added Items</div>
-            <div class="container1">
-            	<div class="spacer2"></div>
-            	<div class="instructionText" id="instructionText">
-            	<%-- <c:forEach items="${productList}" var="element"> 
-  <tr>
-    <td>${element}</td>
-    <td>${element}</td>
-    <td>${element}</td>
-    <td>${element}</td>
-  </tr>
-</c:forEach> --%>
+           
+            	<table id="instructionText" border=1>
+            <tr>
+            <th> Quantity</th>
+            <th>Item Id</th>
+            <th>Item Name</th>
+            <th> Related Products</th>
+            <th >Delete </th>
+            <th>Update</th>
+            </tr>
+            </table>
+              <div class="instructionText" >
             	</div>
                 <div class="spacer2"></div>
             </div>
-            
+          
             <!-- <div class="container1">
             	<div class="blueText boldText">These items will be tied to Sales Rep 
             	<div id="salesId">Sales Rep #1</div></div>
@@ -105,6 +106,7 @@
                 </div>                
                 <div class="clear"></div>
             </div> -->
+            
         </div>
    </form>
    <script>
