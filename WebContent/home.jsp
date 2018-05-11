@@ -1,12 +1,14 @@
-<!DOCTYPE html>
+<%@ page language="java" contentType="text/html; charset=ISO-8859-1"
+    pageEncoding="ISO-8859-1"%>
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
-<meta charset="utf-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, target-densityDpi=device-dpi, user-scalable=no"/>
-<title>OPUS MOBILE</title>
-
+<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+<title>Insert title here</title><%-- 
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %> --%>
 <link rel="stylesheet" type="text/css" href="css/OM.css">
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+<script type="text/javascript" src="http://ajax.microsoft.com/ajax/jQuery.Validate/1.6/jQuery.Validate.min.js"></script>
 <script type="text/javascript" src="./js/assignment.js"></script>
 <body>
 	
@@ -18,7 +20,9 @@
             <div class="floatLeft paddingLeft10">Product Inventory</div>
             <div class="clear"></div>
         </div>
-        <form action="./AddProduct" >
+        <form action="" method="post"
+        accept-charset="utf-8"
+         name="productRegistration" id="productRegistration" >
     	<!-- Below class to show LEFT and Right border -->
         <div class="headercontentblock1">                      
             <div class="container1"> 
@@ -27,39 +31,65 @@
                 	<div class="boldText">Scan an item or enter information below</div>
                     <div class="spacer2"></div>
                     <div class="floatLeft selectWidth15">
-                        <input name="quantity" type="text" class="inputboxBg selectWidth45" size="15" maxlength="15" placeholder="">
+                        <input name="quantity" id="quantity" type="text" class="inputboxBg selectWidth45" size="15" maxlength="15" placeholder="">
                         <div class="padding10">*Qty</div>
                     </div>
-                    <div class="floatLeft selectWidth45">
-                        <input name="itemId" type="text" class="inputboxBg selectWidth80" size="15" maxlength="15" placeholder="">
+                    <div class="floatLeft selectWidth25">
+                        <input name="itemId"  id="itemId" type="text" class="inputboxBg selectWidth80" size="15" maxlength="15" placeholder="">
                         <div class="padding10">*Item ID, UPC, SIM, or IMEI</div>
+                    </div>
+                     <div class="floatLeft selectWidth25">
+                        <!-- <input name="itemName"  id="itemName" type="text" class="inputboxBg selectWidth80" size="15" maxlength="15" placeholder="">
+                         -->
+                         <label class="custom-select selectWidth90">
+                            <select onchange="changeProductName(this.value)" name="itemName" id="itemName">
+                                <option selected value=""> Please select Item</option>
+                                <option value="Shoe">Shoe</option>
+                                <option value="Phones">Phones </option>
+                                <option value="Clothes">Clothes</option>
+                            </select>
+                        </label>
+                         <div class="padding10">*Item Name</div>
                     </div>
                     <div class="floatLeft selectWidth25">
                          <label class="custom-select selectWidth90">
-                            <select onchange="changedSalesRep(this.value)" name="salesRepId">
-                                <option selected value="Sales Rep #1"> Sales Rep #1 </option>
-                                <option value="Sales Rep #2">Sales Rep #2 </option>
-                                <option value="Sales Rep #3">Sales Rep #3</option>
+                            <select name="salesRepId" id="salesRepId">
+                                <option selected value="No Related Products"> Please select </option>
+                               
                             </select>
                         </label>
-                        <div class="padding10">Sales Rep</div>
+                        <div class="padding10">Related Products</div>
                     </div>
                     <div class="floatLeft selectWidth15">
-                        <input type="submit" value=" Quick Add " class="greenButton" >
-                    </div>                
+                        <input type="button" value=" Quick Add " class="greenButton"  onclick="validateForm()">
+                    </div> 
+                    
+                               
                     <div class="clear"></div>
                     <div class="spacer2"></div>
+                     <div class="redText" id="error">
+                   
+                    </div>   
                 </div>
                 <div class="clear"></div>                                            	                
             </div>
             <div class="sharpblueBar">Added Items</div>
             <div class="container1">
             	<div class="spacer2"></div>
-            	<div class="instructionText">No items added</div>
+            	<div class="instructionText" id="instructionText">
+            	<%-- <c:forEach items="${productList}" var="element"> 
+  <tr>
+    <td>${element}</td>
+    <td>${element}</td>
+    <td>${element}</td>
+    <td>${element}</td>
+  </tr>
+</c:forEach> --%>
+            	</div>
                 <div class="spacer2"></div>
             </div>
-            <div class="omblueLine"></div>
-            <div class="container1">
+            
+            <!-- <div class="container1">
             	<div class="blueText boldText">These items will be tied to Sales Rep 
             	<div id="salesId">Sales Rep #1</div></div>
             	
@@ -74,9 +104,11 @@
                     <input type="submit" value=" Update Stock " class="blueButton">
                 </div>                
                 <div class="clear"></div>
-            </div>
+            </div> -->
         </div>
    </form>
+   <script>
+</script>
         <!-- End to show LEFT and Right border -->
         <!-- Below class to show Bottom border with LEFT and RIGHT rounded corners. -->
     	<div class="headercontentblock0"></div>

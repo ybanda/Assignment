@@ -35,7 +35,7 @@ public class LoginServlet extends HttpServlet {
 		String password = request.getParameter("password");
 		logger.info("Inside of GEt Method -- User Id "+userName +" Password="+password);
 		if(userName.equals("admin")&& password.equals("admin")) {
-			response.sendRedirect("home.html");
+			response.sendRedirect("home.jsp");
 		}else {
 	response.sendRedirect("error.html");
 	}
