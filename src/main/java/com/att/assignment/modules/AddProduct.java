@@ -46,7 +46,28 @@ public class AddProduct extends HttpServlet {
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		logger.info("Inside of Add Product :: GET");
-		request.setAttribute("productList", productList);
+		PrintWriter out = null;
+		Gson gson = null;
+		JsonObject jsonObject = null;
+		JsonElement productJSON =null;
+		try{
+			out =response.getWriter();
+			gson=new Gson(); 
+			jsonObject = new JsonObject();
+			productJSON = gson.toJsonTree(productList.values());
+			jsonObject.add("productJSON", productJSON);
+			logger.info(jsonObject.toString());
+			out.println(jsonObject.toString());
+			out.close();
+			
+		}catch(Exception exception)
+		{
+			logger.error("Exception occured in doGet Method ::"+exception.getMessage(),exception);
+		}
+		finally {
+			
+		}
+		
 	}
 
 	/**
@@ -103,7 +124,7 @@ public class AddProduct extends HttpServlet {
 					response.sendRedirect("add-error.html");
 				}
 				break;
-			case "update":
+			case "updateAdd":
 				Product productUpdate = new Product(quantity,itemId,itemName,relatedProdId);
 				productList.put(itemId,productUpdate);
 
@@ -123,7 +144,7 @@ public class AddProduct extends HttpServlet {
 			out.close();
 		}
 		catch(Exception exception) {
-			exception.printStackTrace();
+			logger.error("Exception occured in doPost Method ::"+exception.getMessage(),exception);
 		}
 		finally{
 			operation =null;

@@ -1,5 +1,3 @@
-
-
 function changeProductName(val){
 	console.log('changeProductName='+val);
 	var shoeRelatd = ['lace','shoepolish', 'Brush','shinner'];
@@ -16,25 +14,22 @@ function changeProductName(val){
 	case 'Clothes':
 		finalArray=clotherRelated;
 		break;
-
-
-
 	}
-	var option = '';
+	var option = '<option selected value="No Related Products"> Please select </option>';
 	for (var i=0;i<finalArray.length;i++){
 		option += '<option value="'+ finalArray[i] + '">' + finalArray[i] + '</option>';
 	}
 	console.log('Option value='+val+' Appeneded Value ='+option);
-	$('#salesRepId').append(option);
+	$('#salesRepId').html(option);
 }
 
 //inputboxerror
 
 $(document).ready(function(){
-	//validateForm();
+	//refreshGrid();
 
 });
-function validateForm(){
+function validateForm(operation){
 	console.log("Document is Loaded :: validateForm");
 	var returnValue=true;
 	var errorStr="";
@@ -69,46 +64,87 @@ function validateForm(){
 	}
 	console.log('ReturnVal'+returnValue+"--"+(returnValue==true));
 	if(returnValue==true)
-		populateTheGrid(quantity,itemId,itemName,salesRepId);
+		populateTheGrid(operation,quantity,itemId,itemName,salesRepId);
+	
+		
 	error.html(errorStr);
 	$("#loading").attr("disabled",false).css({'cursor':'default'});
+	
+	//if(operation='updateAdd')			
+			//window.location="./update-success.jsp?itemId="+itemId;
+		
 	return returnValue;
 }
-function performOperation(operation,quantity,itemId,itemName,relatedProdId){
-	console.log('performOperation='+operation+'Item Id='+itemId);
+function refreshGrid(operation){
+	console.log('Inside of refreshGrid')
 	$.ajax({
 		url: "AddProduct",
-		type: "POST",
-		data:
-			"operation="+operation+
-			"&quantity="+quantity+
-			"&itemId="+itemId+
-			"&itemName="+itemName+
-			"&relatedProdId="+relatedProdId,
-
-			success: function(data, textStatus, jqXHR) {
+		type: "GET",
+		success: function(data, textStatus, jqXHR) {
 				console.log(data);
 				var parsed = data;
 				parsed = JSON.parse(parsed);
-				//console.log("Parsed="+parsed.productJSON[0].quantity);
-
+				if(operation=='json'){
+					window.open("printJson.jsp?json="+JSON.stringify(parsed));
+				$("#statusId").html('Opened JSON Data');
+				}
+				else{
 				constructDataGrid(parsed);
-
-
+				$("#statusId").html('Data Grid Refresh Success');
+				}
 			},
 			error: function(jqXHR, textStatus, errorThrown){
-				console.log("Something really bad happened " + textStatus +"\n"+jqXHR.responseText);
+				console.log("Something really bad happened " +JSON.stringify(jqXHR)+","+ textStatus +"\t"+errorThrown);
 
 			}
 
 	}).done(function( e ) {
 		console.log( "word was saved" + e );
 	});
+	
+}
+
+function performOperation(operation,quantity,itemId,itemName,relatedProdId){
+	console.log('performOperation='+operation+',Item Id='+itemId);
+	if(operation=='delete'){
+		$.ajax({
+			url: "AddProduct",
+			type: "POST",
+			data:
+				"operation="+operation+
+				"&quantity="+quantity+
+				"&itemId="+itemId+
+				"&itemName="+itemName+
+				"&relatedProdId="+relatedProdId,
+
+				success: function(data, textStatus, jqXHR) {
+					console.log(data);
+					var parsed = data;
+					parsed = JSON.parse(parsed);
+					//console.log("Parsed="+parsed.productJSON[0].quantity);
+
+					constructDataGrid(parsed);
+
+
+				},
+				error: function(jqXHR, textStatus, errorThrown){
+					console.log("Something really bad happened " + textStatus +"\n"+jqXHR.responseText);
+
+				}
+
+		}).done(function( e ) {
+			console.log( "word was saved" + e );
+		});
+	}
+	else if(operation=='update'){
+		window.open('update.jsp?quantity='+quantity+"&itemId="+itemId+"&itemName="+itemName+"&relatedProdId="+relatedProdId);
+	}
 
 }
-function populateTheGrid(quantity,itemId,itemName,relatedProdId){
-	var operation='add';
-	console.log('Populate Grid'+quantity+","+itemId+","+itemName+","+relatedProdId);
+
+function populateTheGrid(operation,quantity,itemId,itemName,relatedProdId){
+
+	console.log('Populate Grid :: operation ='+operation+","+quantity+","+itemId+","+itemName+","+relatedProdId);
 	var returnValue;
 	$.ajax({
 		url: "AddProduct",
@@ -121,16 +157,23 @@ function populateTheGrid(quantity,itemId,itemName,relatedProdId){
 			"&relatedProdId="+relatedProdId,
 
 			success: function(data, textStatus, jqXHR) {
-				console.log(data);
+
+				console.log("Data inside of Populategrid ::success"+data);
 				var parsed = data;
 				parsed = JSON.parse(parsed);
 				console.log("populateTheGrid :: success"+parsed);
-
-				constructDataGrid(parsed);
+				if(operation=='updateAdd')
+				{
+					window.close();
+					constructDataGrid(parsed);
+				}
+				else
+					constructDataGrid(parsed);
 
 			},
 			error: function(jqXHR, textStatus, errorThrown){
-				console.log("Something really bad happened " + textStatus +"\n"+jqXHR.responseText);
+				console.log("Something really bad happened " + textStatus +"\t"+jqXHR.responseText +
+						'\t'+errorThrown);
 
 			}
 

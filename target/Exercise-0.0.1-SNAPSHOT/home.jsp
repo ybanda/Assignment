@@ -10,7 +10,7 @@
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
 <script type="text/javascript" src="http://ajax.microsoft.com/ajax/jQuery.Validate/1.6/jQuery.Validate.min.js"></script>
 <script type="text/javascript" src="./js/assignment.js"></script>
-<body>
+<body onload="refreshGrid()">
 	
     <!--Code Starts Here-->
     <div class="container">
@@ -62,7 +62,7 @@
                         <div class="padding10">Related Products</div>
                     </div>
                     <div class="floatLeft selectWidth15">
-                        <input type="button" id="loading" value=" Quick Add " class="greenButton"  onclick="validateForm()">
+                        <input type="button" id="loading" value=" Quick Add " class="greenButton"  onclick="validateForm('add')">
                     </div> 
                     
                                
@@ -74,7 +74,14 @@
                 </div>
                 <div class="clear"></div>                                            	                
             </div>
-            <div class="sharpblueBar">Added Items</div>
+           <!--  <div class="sharpblueBar">Added Items <button value="Refresh Grid" onclick="performOperation('delete','test','sssqqqqq','test','test');" class="blueButton">Refresh Grid</button></div>
+            -->
+             <div class="sharpblueBar">Added Items 
+             <button value="Refresh Grid" onclick="refreshGrid('none');return false;" class="blueButton">Refresh Grid</button>
+             
+             <button value="Get JSON Data" onclick="refreshGrid('json');return false;" class="blueButton">Get JSON Data</button>
+             <button id="statusId" disabled></button>
+             </div>
            
             <table id="instructionText" border=1>
             <tr>

@@ -4,20 +4,20 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
-<title>Home</title><%-- 
+<title>Update Product</title><%-- 
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %> --%>
 <link rel="stylesheet" type="text/css" href="css/OM.css">
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
 <script type="text/javascript" src="http://ajax.microsoft.com/ajax/jQuery.Validate/1.6/jQuery.Validate.min.js"></script>
 <script type="text/javascript" src="./js/assignment.js"></script>
-<body onload="refreshGrid()">
+<body>
 	
     <!--Code Starts Here-->
     <div class="container">
-    	<div class="orangeText boldText padding10">Home Page: Product Management</div>                
+    	<div class="orangeText boldText padding10">Update Product Management</div>                
         <div class="headerBarblock">
         	<div class="floatLeft boldText">&minus;</div>
-            <div class="floatLeft paddingLeft10">Product Inventory</div>
+            <div class="floatLeft paddingLeft10">Product Update</div>
             <div class="clear"></div>
         </div>
         <form action="" method="post"
@@ -28,15 +28,18 @@
             <div class="container1"> 
             	<div class="floatLeft scanner"></div>
                 <div class="floatLeft selectWidth85 marginLeft20">
-                	<div class="boldText">Scan an item or enter information below</div>
+                	<div class="boldText">Modify the below item to update</div>
                     <div class="spacer2"></div>
                     <div class="floatLeft selectWidth15">
-                        <input name="quantity" id="quantity" type="text" class="inputboxBg selectWidth45" size="15" maxlength="15" placeholder="">
+                        <input name="quantity" id="quantity" type="text" class="inputboxBg selectWidth45" size="15" maxlength="15" 
+                        value="<%=request.getParameter("quantity") %>">
                         <div class="padding10" >*Qty</div>
                       
                     </div>
                     <div class="floatLeft selectWidth25">
-                        <input name="itemId"  id="itemId" type="text" class="inputboxBg selectWidth80" size="15" maxlength="15" placeholder="">
+                        <input name="itemId"  id="itemId" type="text" class="inputboxBg selectWidth80" size="15" 
+                        value="<%=request.getParameter("itemId") %>"
+                        maxlength="15" disabled="disabled">
                         <div class="padding10">*Item ID, UPC, SIM, or IMEI</div>
                     </div>
                      <div class="floatLeft selectWidth25">
@@ -44,25 +47,40 @@
                          -->
                          <label class="custom-select selectWidth90">
                             <select onchange="changeProductName(this.value)" name="itemName" id="itemName">
+                            
                                 <option selected value=""> Please select Item</option>
-                                <option value="Shoe">Shoe</option>
-                                <option value="Phones">Phones </option>
-                                <option value="Clothes">Clothes</option>
+                            <%if(request.getParameter("itemName").equalsIgnoreCase("Shoe")){ %>
+                            <option value="Shoe" selected>Shoe</option>
+                            <%}else{ %>
+                             <option value="Shoe" >Shoe</option>
+                             <%} %>
+                              <%if(request.getParameter("itemName").equalsIgnoreCase("Phones")){ %>
+                            <option value="Phones" selected>Phones</option>
+                            <%}else{ %>
+                             <option value="Phones" >Phones</option>
+                             <%} %>
+                              <%if(request.getParameter("itemName").equalsIgnoreCase("Clothes")){ %>
+                            <option value="Clothes" selected>Clothes</option>
+                            <%}else{ %>
+                             <option value="Clothes">Clothes</option>
+                             <%} %>
+                               
                             </select>
                         </label>
                          <div class="padding10">*Item Name</div>
                     </div>
                     <div class="floatLeft selectWidth25">
                          <label class="custom-select selectWidth90">
-                            <select name="salesRepId" id="salesRepId">
-                                <option selected value="No Related Products"> Please select </option>
+                            <select name="salesRepId" id="salesRepId" >
+                            
+                                <option selected value="<%=request.getParameter("relatedProdId") %>"><%=request.getParameter("relatedProdId") %></option>
                                
                             </select>
                         </label>
                         <div class="padding10">Related Products</div>
                     </div>
                     <div class="floatLeft selectWidth15">
-                        <input type="button" id="loading" value=" Quick Add " class="greenButton"  onclick="validateForm('add')">
+                        <input type="button" id="loading" value="Update Product" class="greenButton"  onclick="validateForm('updateAdd');">
                     </div> 
                     
                                
@@ -74,51 +92,9 @@
                 </div>
                 <div class="clear"></div>                                            	                
             </div>
-           <!--  <div class="sharpblueBar">Added Items <button value="Refresh Grid" onclick="performOperation('delete','test','sssqqqqq','test','test');" class="blueButton">Refresh Grid</button></div>
-            -->
-             <div class="sharpblueBar">Added Items 
-             <button value="Refresh Grid" onclick="refreshGrid('none');return false;" class="blueButton">Refresh Grid</button>
-             
-             <button value="Get JSON Data" onclick="refreshGrid('json');return false;" class="blueButton">Get JSON Data</button>
-             <button id="statusId" disabled></button>
-             </div>
-           
-            <table id="instructionText" border=1>
-            <tr>
-            <th>Quantity</th>
-            <th>Item Id</th>
-            <th>Item Name</th>
-            <th>Related Products</th>
-            <th>Delete </th>
-            <th>Update</th>
-            </tr>
-            </table>
-              <div class="instructionText" >
-            	</div>
-                <div class="spacer2"></div>
-            </div>
-          
-            <!-- <div class="container1">
-            	<div class="blueText boldText">These items will be tied to Sales Rep 
-            	<div id="salesId">Sales Rep #1</div></div>
-            	
-                <div>To change the rep, select from dropdown.</div>
-                <div class="spacer2"></div>
-                <div class="boldText">
-                	AT&T Any City, USA<br>
-                	(555) 555-5555
-                </div>
-                <div class="spacer2"></div>
-                <div class="floatLeft selectWidth15">
-                    <input type="submit" value=" Update Stock " class="blueButton">
-                </div>                
-                <div class="clear"></div>
-            </div> -->
-            
-        </div>
+
    </form>
-   <script>
-</script>
+  
         <!-- End to show LEFT and Right border -->
         <!-- Below class to show Bottom border with LEFT and RIGHT rounded corners. -->
     	<div class="headercontentblock0"></div>
